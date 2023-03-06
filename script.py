@@ -29,9 +29,6 @@ def createInDirectory(targetDir):
 
         count += 1
 
-# directorys 
-
-
 if __name__ == '__main__':
 
     if(sys.argv[1] == '--dir'):

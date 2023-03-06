@@ -25,3 +25,11 @@ int main(){
     return 0;
 }
 ```
+
+About the Exercise_3 from __function-exercises__
+
+>"The results are related to the second number provided, if the first is divisible by it, otherwise, find the next number that is divisible by it. The second number given is constant"
+
+    
+
+
