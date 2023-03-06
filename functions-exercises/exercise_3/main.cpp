@@ -3,14 +3,7 @@
 using namespace std;
 
 
-int checkDivisor(int first_number, int second_number) {
-    int divisor = first_number / second_number;
-
-    if (first_number % second_number == 0)
-        return 0;
-    else
-        return (divisor + 1) * second_number;  
-}
+int checkDivisor(int first_number, int second_number);
 
 int main(){
 
@@ -32,4 +25,14 @@ int main(){
         cout << "[*]" << number_1 << "is divisble by" << number_2 << endl;
 
     return 0;
+}
+
+
+int checkDivisor(int first_number, int second_number) {
+    int divisor = first_number / second_number;
+
+    if (first_number % second_number == 0)
+        return 0;
+    else
+        return (divisor + 1) * second_number;  
 }
