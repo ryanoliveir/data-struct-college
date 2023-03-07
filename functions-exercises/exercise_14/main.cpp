@@ -69,7 +69,8 @@ void getValues(std::vector<int> &vector, std::vector<int> &positive_values, std:
 
 void showVector(std::vector<int> &vector){
 
-    for(int i=0; i< vector.size(); i++){
+    for(int i = 0; i < vector.size(); i++){
+        
         if(i == vector.size() -1){
             std::cout << vector[i] << " ";
 
