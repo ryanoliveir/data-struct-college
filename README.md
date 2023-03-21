@@ -79,3 +79,15 @@ int main(){
     return 0;
 }
 ```
+
+
+## The Virtual Terminal Processing
+
+The Virtual Terminal Processing is a feature added to the Windows console from version 10 onwards that allows applications to control the behavior of the console, such as text formatting, colors, styles, and other visual features.
+
+Before the support for Virtual Terminal Processing, the Windows console did not provide a direct API for controlling these features, which made it difficult for developers to create advanced and custom console interfaces.
+
+With Virtual Terminal Processing, applications can emit ANSI escape sequences to control text formatting and other console features, and the Windows console will interpret these sequences appropriately. This allows developers to create richer and more personalized console interfaces.
+
+In summary, Virtual Terminal Processing is a feature that allows applications to control the appearance and behavior of the Windows console more flexibly and customarily.
+
