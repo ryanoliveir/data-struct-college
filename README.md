@@ -91,3 +91,27 @@ With Virtual Terminal Processing, applications can emit ANSI escape sequences to
 
 In summary, Virtual Terminal Processing is a feature that allows applications to control the appearance and behavior of the Windows console more flexibly and customarily.
 
+
+> O operador const auto& a define uma referência constante para cada elemento do vetor. Isso significa que o valor do elemento não pode ser alterado dentro do loop.
+
+
+```c++
+std::pair<int, int> max_min_Age(const std::vector<int> &age) {
+
+    int max_Age = age[0];
+    int min_Age = age[0];
+
+    // for (int i = 1; i < age.size(); i++){
+    //     if (max_Age > age[i]) max_Age = age[i];
+    //     if (min_Age < age[i]) min_Age = age[i];
+    // }
+
+    for (const auto &age_value : age){ 
+        if (max_Age > age_value) max_Age = age_value;
+        if (min_Age < age_value) min_Age = age_value;
+    }
+
+    return std::make_pair(max_Age, min_Age);
+
+}
+```
