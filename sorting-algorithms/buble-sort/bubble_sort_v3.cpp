@@ -46,7 +46,7 @@ void bubble_sort_v3(std::vector<int>& vector){
                 std::cout << "Troca realizada: " << vector[i] << " e " << vector[i+1] << "\n";
                 showVector(vector);
                
-            }else {
+            } else {
                 std::cout << "Troca nao realizada: " << vector[i] << " e " << vector[i+1] << "\n";
                 showVector(vector);
             }

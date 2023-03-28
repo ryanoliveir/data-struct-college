@@ -5,7 +5,7 @@
 #include <windows.h>
 
 // Uncomment the following line to compile in DEV-C++
-// #define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
+#define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
 
 class LOG {
     private:
