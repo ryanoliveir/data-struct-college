@@ -115,3 +115,9 @@ std::pair<int, int> max_min_Age(const std::vector<int> &age) {
 
 }
 ```
+
+
+
+## What is Searching Algorithm?
+
+> "Searching Algorithms are designed to check for an element or retrieve an element from any data structure where it is stored."
