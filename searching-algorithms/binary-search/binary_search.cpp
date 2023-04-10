@@ -3,18 +3,18 @@
 #include <random>
 #include <string>
 
-const int VECTOR_SIZE = 5;
 
+const int VECTOR_SIZE = 30;
+const int None = 0;
 
 void showVector(const std::vector<int> &vector, std::string vector_name);
 void populateVector(std::vector<int> &vector);
 
 void quickSort(std::vector<int>& vector, int begin, int end);
-int partition(std::vector<int>& vector, int begin, int end);
 void sort(std::vector<int>& vector);
+int partition(std::vector<int>& vector, int begin, int end);
 
-bool sequencialSearch(std::vector<int>& vector, int target);
-bool sequencialSearchSorted(std::vector<int>& vector, int target);
+bool binarySearch(std::vector<int>& vector, int target, int begin = 0, int end = None);
 
 int main(){
 
@@ -22,80 +22,40 @@ int main(){
     int target_input;
 
     populateVector(vector_x);
-    
+    sort(vector_x);
 
-
-    // sort(vector_x);
-
-    // showVector(vector_x, "vector_x");
     showVector(vector_x, "vector_x");
     std::cout << "\n[*]  Provide number to search in vector: ";
     std::cin >> target_input;
 
-    std::cout << "[*]  Unsorted vector: " << std::endl;
-    showVector(vector_x, "vector_x");
 
-    if(sequencialSearch(vector_x, target_input)){
+    if(binarySearch(vector_x, target_input)){
         std::cout << "[*]  The value '"<< target_input <<"' was finded in vector" << std::endl;
     } else {
         std::cout << "[*]  The value '"<< target_input <<"' not finded" << std::endl;
     }
-
-
-    sort(vector_x);
-    
-    std::cout << "[*]  Sorted vector: " << std::endl;
-    showVector(vector_x, "vector_x");
-
-    if(sequencialSearchSorted(vector_x, target_input)){
-        std::cout << "[*]  The value '"<< target_input <<"' was finded in vector" << std::endl;
-    } else {
-        std::cout << "[*]  The value '"<< target_input <<"' not finded" << std::endl;
-    }
-
 
     return 0;
 }
 
+bool binarySearch(std::vector<int>& vector, int target, int begin, int end){
 
-// unsorted vector
-bool sequencialSearch(std::vector<int>& vector, int target){
+    if (end == None ) end = vector.size() -1 ;
 
-    for (int i = 0; i < vector.size(); i++){
-        if (vector[i] == target) return true;
+    if (begin <= end){
+        int m = (begin + end) / 2;
+
+        if(vector[m] == target) return true; // finded 
+
+        if(target < vector[m]){
+            return binarySearch(vector, target, begin, m - 1);
+        } else {
+            return binarySearch(vector, target, m + 1, end);
+        }
     }
 
     return false;
-
-
-    // for (const auto& value : vector){
-    //     if (value == target) return true; 
-    // }
-
-    // return false;
-
 }
-
-
-// sorted vector
-bool sequencialSearchSorted(std::vector<int>& vector, int target){
-
-    for (int i = 0; i < vector.size(); i++){
-        std::cout << "vector[" << i <<"] >= " << target <<  "?"  << std::endl;
-        if (vector[i] == target) 
-            return true;
-       
-        std::cout << "target = " << target << " >= vector[" << i <<"] ?\n" << std::endl;
-        if (!(target >= vector[i])) 
-            return false;
-            
-    }
-
-    return false;
-
-}
-
-
 
 
 void showVector(const std::vector<int> &vector, std::string vector_name){
@@ -113,7 +73,6 @@ void showVector(const std::vector<int> &vector, std::string vector_name){
 
     std::cout << "}\n"<< std::endl;
 }
-
 
 void populateVector(std::vector<int> &vector){
     std::random_device rd;

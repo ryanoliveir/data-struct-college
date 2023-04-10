@@ -121,3 +121,52 @@ std::pair<int, int> max_min_Age(const std::vector<int> &age) {
 ## What is Searching Algorithm?
 
 > "Searching Algorithms are designed to check for an element or retrieve an element from any data structure where it is stored."
+
+## About binary search Approach
+
+> "__Binary Search__ is a search algorithm use in a __sorted array__ by repeatedly deviding the search interval in half. The idea of bynary search is to use information that arrya is sorted and reduce time complexity to 0 (log n)"
+
+```c++
+// binary_search.cpp (recursive approach)
+
+
+const None = 0;
+
+bool binarySearch(std::vector<int>& vector, int target, int begin = 0, int end = None );
+
+int  main(){
+
+    //...
+
+    return 0;
+}
+
+bool binarySearch(std::vector<int>& vector, int target, int begin, int end){
+
+    if (end == None ) end = vector.size() -1 ;
+
+    if (begin <= end){
+        int m = (begin + end) / 2;
+
+        if(vector[m] == target) return true; // finded 
+
+        if(target < vector[m]){
+            return binarySearch(vector, target, begin, m - 1);
+        } else {
+            return binarySearch(vector, target, m + 1, end);
+        }
+    }
+
+    return false;
+}
+
+
+
+
+```
+
+
+
+
+
+
