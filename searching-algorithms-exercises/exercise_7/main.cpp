@@ -206,8 +206,8 @@ int main(){
          }
 
         console.log("[*] Finish");
-        std::cout << "dadajdaid";
     } catch(std::exception& e){
+        std::cout << "dadajdaid";
         std::cout << e.what() << std::endl;
     }
 
