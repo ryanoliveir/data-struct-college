@@ -5,7 +5,12 @@
 #include <unistd.h>
 #include <chrono>
 #include <thread>
+#include <cstdlib>
+#include <ctime>
 #include <windows.h>
+#include <exception>
+// Uncomment the following line to compile in DEV-C++
+#define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
 
 
 class LOG {
@@ -89,10 +94,10 @@ struct Matrix {
     int column;
 };
 
-const int None = 0;
-Matrix matrix;
+const int None = -1;
 
-void populateVector(std::vector<int> &vector);
+
+void populateVector(std::vector<int> &vector, Matrix& matrix_t);
 void showVector(const std::vector<int> &vector, std::string vector_name);
 
 void populateMatrix(const std::vector<int>& vector, std::vector<std::vector<int>>& matrix, Matrix& matrixType);
@@ -102,10 +107,12 @@ void quickSort(std::vector<int>& vector, int begin, int end);
 void sort(std::vector<int>& vector);
 int partition(std::vector<int>& vector, int begin, int end);
 
-bool binarySearch(std::vector<int>& vector, int target, int begin = 0, int end = 0);
+      bool binarySearch(std::vector<std::vector<int>>& matrix, int target, int row, int beginCol, int endCol);
+bool binarySearchMatrix(std::vector<std::vector<int>>& matrix, int target, int row, int colBegin, int colEnd);
 
+Matrix matrix;
 
-void load();
+// void load();
 
 int main(){
 
@@ -114,11 +121,10 @@ int main(){
     console.enableUTF8Mode();
 
     
-
     // - Pegar ordem da matriz pelo usuário
 
     std::string m_input, n_input;
-    int target_input;
+    int target_input = 0;
 
     console.log("[*] Please, provide matriz order: ");
 
@@ -150,9 +156,10 @@ int main(){
 
     // - Criar vetor com o numero de elementos que a matriz comporta  nessa ordem com vector<int>
 
-    std::vector<int> vector_buffer(matrix.row * matrix.column);
+    int matrix_size = matrix.row  * matrix.column;
+    std::vector<int> vector_buffer(matrix_size);
 
-    populateVector(vector_buffer);
+    populateVector(vector_buffer, matrix);
     showVector(vector_buffer, "vector_buffer");
 
     // - Ordenar vetor gerado
@@ -164,78 +171,45 @@ int main(){
     std::cout << console.blue() <<"\n[*] Element to find : " << console.reset();
     std::cin >> target_input;
 
-    if(binarySearch(vector_buffer, target_input)){
-        std::cout << console.green() << "[*]  The element ' "<< target_input <<"' was finded in vector" << std::endl;
-    } else {
-        std::cout << console.red() << "[*]  The element ' "<< target_input <<"' not finded" << std::endl;
-    }
-
     std::vector<std::vector<int>> matrix_main(matrix.row, std::vector<int>(matrix.column));
     populateMatrix(vector_buffer, matrix_main, matrix);
     showMatrix(matrix_main, "matrix_main");
 
-    int j = 0; 
-    for (int i = 0; i < matrix.row ; i++){
-        if(binarySearch(matrix_main[i], target_input)){
-            std::cout << console.green() << "[*]  The element ' "<< target_input <<"' was finded in vector" << std::endl;
-        } else {
-            std::cout << console.red() << "[*]  The element ' "<< target_input <<"' not finded" << std::endl;
-        }
-    }
-    // // - Popular matrix[][] com o vetor[]
-
-    // console.log("\n[SEARCH ELEMENT]");
-    // std::cout << console.blue() <<"\n[*] Element to find : " << console.reset();
-    // std::cin >> target_input;
-    // std::cout << "oi0" << std::endl;
-
     // if(binarySearch(vector_buffer, target_input)){
-    //         std::cout << console.green() << "[*]  The element ' "<< target_input <<"' was finded in matrix" << std::endl;
-    //         // std::cout << console.green() << "[*]  Position > 'matrix["<< matrix.row <<"]["<< matrix.column <<"] was finded in vector" << std::endl;
-    //         // std::cout << "oi2" << std::endl;
-    //         // found = true;
+    //         std::cout << console.green() << "[*]  The element '"<< target_input <<"' was finded in vector" << std::endl;
+    // } else {
+    //         std::cout << console.red() << "[*]  The element '"<< target_input <<"' not finded" << std::endl;
+    // }
+    // for (int i = 0; i < matrix_main.size(); i++){
+    //     if(binarySearchMatrix(matrix_main, target_input, i, 0, matrix_main[0].size() - 1)){
+    //         std::cout << console.green() << "[*]  The element ' "<< target_input <<"' was finded in vector" << std::endl;
+    //     } else {
+    //         std::cout << console.red() << "[*]  The element ' "<< target_input <<"' not finded" << std::endl;
+    //     }
     // }
 
-    // // - Pegar target (elemento a ser procurado na matriz)
+    // // std::cout << console.blue() <<"\n[*] Rows: " << matrix.row << console.reset();
 
-    // console.log("\n[SEARCH ELEMENT]");
-    // std::cout << console.blue() <<"\n[*] Element to find : " << console.reset();
-    // std::cin >> target_input;
-    // std::cout << "oi0" << std::endl;
-    // // - Chamar uma função, que passa cada linha da matriz (que é um vetor) como parametro para a busca binária
+    try {
 
-    // bool found = false;
-    // std::cout << target_input << std::endl;
-    // for (int i = 0; i < matrix.row; i++){
-    //     // std::cout << "oi2" << std::endl;
-    //     // std::cout <<  matrix_main.size() << std::endl;
-    //     load();
-    //     std::cout << std::endl;
+         std::cout << "matrix_main size: " << matrix_main.size() << std::endl;
+         for (int i = 0; i < matrix_main.size(); i++){
+             std::cout << i << "º  - row "  << std::endl;   
 
-    //     std::vector<int> vector_aux(matrix.column);
+             bool find = binarySearch(matrix_main, target_input, i, 0, matrix_main[0].size() - 1);
 
-    //     for (int j = 0; j < vector_aux.size(); j++){
-    //         vector_aux[j] = matrix_main[i][j];
-    //     }
+             if(find){
+                 std::cout << console.green() << "[*]  The element '"<< target_input <<"' was finded in vector" << std::endl;
+             } else {
+                 std::cout << console.red() << "[*]  The element '"<< target_input <<"' not finded" << std::endl;
+             }
+         }
 
-    //     showVector(vector_aux, "vector_aux");
-
-    //     if(binarySearch(vector_aux, target_input)){
-    //         std::cout << console.green() << "[*]  The element ' "<< target_input <<"' was finded in matrix" << std::endl;
-    //         // std::cout << console.green() << "[*]  Position > 'matrix["<< matrix.row <<"]["<< matrix.column <<"] was finded in vector" << std::endl;
-    //         // std::cout << "oi2" << std::endl;
-    //         found = true;
-    //     }
-    //     // std::cout << "oiFor" << std::endl;
-    // }
-
-    // // std::cout << "oi4" << std::endl;
-    // // std::cout << found << std::endl;
-    // // if (!(found)) 
-    // std::cout << console.red() << "[*]  The element ' "<< target_input <<"' not finded" << std::endl;
-
-    // // - Retornar a possição em que foi encontrado no vetor
-    // // - Retornar a linha (vetor) que o elemento foi encontado na matriz
+        console.log("[*] Finish");
+        std::cout << "dadajdaid";
+    } catch(std::exception& e){
+        std::cout << e.what() << std::endl;
+    }
 
 
     return 0;
@@ -243,13 +217,15 @@ int main(){
 }
 
 
-void populateVector(std::vector<int> &vector){
+void populateVector(std::vector<int> &vector, Matrix& matrix_t){
     std::random_device rd;
     std::mt19937 gen(rd());
-   
 
-    for (int i = 0; i < vector.size(); i++){
-        std::uniform_int_distribution<> dis(-200, 100);
+    auto seed = std::chrono::system_clock::now().time_since_epoch().count();
+    gen.seed(seed);
+
+    for (int i = 0; i < matrix_t.row * matrix_t.column ; i++){
+        std::uniform_int_distribution<> dis(-200, 200);
         vector[i] = dis(gen);
     }
 
@@ -362,39 +338,48 @@ void sort(std::vector<int>& vector){
     quickSort(vector, begin, end);
 }
 
+// TODO: Adapt this to receive a matrix[m][n]
+bool binarySearch(std::vector<std::vector<int>>& matrix, int target, int row, int beginCol, int endCol){
 
-bool binarySearch(std::vector<int>& vector, int target, int begin, int end){
-
-    if (end == None ) end = vector.size() -1 ;
-
-    if (begin <= end){
-        int m = (begin + end) / 2;
-
-        if(vector[m] == target) {
-            matrix.column = m;
-            return true;
-        } // finded 
-
-        if(target < vector[m]){
-            return binarySearch(vector, target, begin, m - 1);
-
+    if (endCol == -1 ) endCol = matrix[0].size() - 1;
+    if (beginCol <= endCol){
+        int m = (beginCol + endCol) / 2;
+        if(matrix[row][m] == target){
+            return true ;
+        } else if (matrix[row][m] > target){
+            return binarySearch(matrix, target, row, beginCol, m - 1);
         } else {
-            return binarySearch(vector, target, m + 1, end);
-
+            return binarySearch(matrix, target, row, m + 1, endCol);
         }
     }
-
     return false;
 }
 
 
-void load(){
-    for (int i = 0; i < 7; ++i) {
-        std::cout << ".";
-        // std::cout.flush(); // descarrega o buffer para imprimir imediatamente
-        std::this_thread::sleep_for(std::chrono::milliseconds(100)); // esperar 100 milissegundos
+bool binarySearchMatrix(std::vector<std::vector<int>>& matrix, int target, int row, int colBegin, int colEnd) {
+    if (colEnd == -1) colEnd = matrix[0].size() - 1;
+    if (colBegin <= colEnd) {
+        int mid = (colBegin + colEnd) / 2;
+        if (matrix[row][mid] == target) {
+            return true;
+        } else if (matrix[row][mid] > target) {
+            return binarySearchMatrix(matrix, target, row, colBegin, mid - 1);
+        } else {
+            return binarySearchMatrix(matrix, target, row, mid + 1, colEnd);
+        }
     }
+    return false;
+}
+
+
+
+// void load(){
+//     for (int i = 0; i < 7; ++i) {
+//         std::cout << ".";
+//         // std::cout.flush(); // descarrega o buffer para imprimir imediatamente
+//         std::this_thread::sleep_for(std::chrono::milliseconds(100)); // esperar 100 milissegundos
+//     }
 
    
-}
+// }
 
