@@ -3,6 +3,7 @@ Repository responsible for storing studies and example on data structure from co
 
 
 
+> Todo: Implement this function
 ```c++
 bool verifyType()
 
@@ -10,9 +11,9 @@ bool verifyType()
 
 
 Notes 
+> "Always initialize a auxiliary variable"
 
 
-Always initialize a auxiliary variable
 
 ```c++
 //Default file
@@ -161,9 +162,12 @@ bool binarySearch(std::vector<int>& vector, int target, int begin, int end){
 }
 
 
-
-
 ```
+
+
+# Linked Lists 
+
+
 
 
 

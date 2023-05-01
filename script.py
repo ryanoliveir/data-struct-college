@@ -1,7 +1,7 @@
 import os
 import sys
 
-DIRECTORY_NUMBER = 25
+DIRECTORY_NUMBER = 6
 MAIN_FILE = 'main.cpp'
 PATH = os.getcwd()
 
