@@ -39,7 +39,7 @@ int menu(){
 		if(opcao < 1 || opcao > 6)
 			cout << "\tEscolha invalida!" << endl;
 
-	}while(opcao < 1 || opcao > 6);
+	} while (opcao < 1 || opcao > 6);
 
 	return opcao;
 
@@ -56,6 +56,8 @@ int main(){
 	int chose, number;
 
 	do {
+		
+		system("cls");
 		chose = menu();
 
 		switch (chose){
