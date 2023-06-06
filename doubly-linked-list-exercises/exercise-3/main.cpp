@@ -2,7 +2,7 @@
 #include <string>
 #include <conio.h>
 #include <windows.h>
-
+#include <iomanip>
 
 // #define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
 
@@ -82,100 +82,76 @@ class LOG {
 };
 
 
-
-struct Node {
-    int number;
-    Node *next;
-    Node *previous;
+struct Student {
+    std::string name;
+    float final_grade;
 };
 
-struct DoubleLinkedList {
-    Node *begin, *end;
+struct Node {
+    Student student;
+    Node* next;
+    Node* previous;
+};
+
+struct DoublyLinkedList {
+    Node* begin;
+    Node* end;
     int size;
 };
 
-int menu();
+bool isEmpty(DoublyLinkedList& list);
 void pause();
 
+Student registerStudent();
 
-bool isEmpty(DoubleLinkedList& list);
 
-void insertHead(DoubleLinkedList& list, int data);
-void insertTail(DoubleLinkedList& list, int data);
+void insertStudent(DoublyLinkedList& list, Student student);
+void dumpStudents(DoublyLinkedList& list, std::string filter = "all");
 
-void showDoubleLinkedList(DoubleLinkedList& list);
 
-bool searchInDoubleLinkedList(DoubleLinkedList& list, int data);
+const int AMOUNT_STUDENTS = 5;
+const float AVERAGE = 7.0;
 
 int main(){
-     
-     DoubleLinkedList list = { nullptr, nullptr, 0};
+    
+    LOG log;
 
-    int choice, input_number;
+    DoublyLinkedList studentList = { nullptr, nullptr, 0};
+    Student student;
+
+    int count = 0;
+
+    system("clear || cls");
+    std::cout << "[Register of Students]"<< std::endl;
 
     do {
-
-        system("cls||clear");
-        choice = menu();
-
-        switch (choice)
-        {
-        case 1:
-            std::cout << "[?] Provide a number: ";
-            std::cin >> input_number;
-            insertHead(list, input_number);
-            pause();
-            break;
-
-        case 2:
-            std::cout << "[?] Provide a number: ";
-            std::cin >> input_number;
-            insertTail(list, input_number);
-            pause();
-            break;
-
-        case 3:
-            std::cout << "[+] List: ";
-            showDoubleLinkedList(list);
-            pause();
-            break;
-
-        case 4:
-            std::cout << "[?] Provide a number to search: ";
-            std::cin >> input_number;
-            searchInDoubleLinkedList(list, input_number);
-
-        default:
-            break;
-        }
-
-    } while (choice != 6);
+        std::cout << "\n["<< count + 1 <<"] Student"<< std::endl;
+        student = registerStudent();
+    
+        insertStudent(studentList, student);
+       
+        // std::cout << student.name << std::endl;
+        // std::cout << student.final_grade << std::endl;
+        count++;
 
 
+    } while (count < AMOUNT_STUDENTS);
+
+    system("clear || cls");
+    std::cout << "[Students]"<< std::endl;
+    dumpStudents(studentList);
+
+    std::cout << "[Approved Students]"<< std::endl;
+    dumpStudents(studentList, "approved");
+
+    pause();
     return 0;
 }
 
-int menu(){
-    int option;
-
-    do {
-
-        std::cout << std::endl << " MENU OPTIONS" << std::endl;
-        std::cout << "[1] Insert at the beginning of the list" << std::endl;
-        std::cout << "[2] Insert at the end of the list" << std::endl;
-        std::cout << "[3] Print the entire list" << std::endl;
-        std::cout << "[4] Search a value in list" << std::endl;
-        std::cout << "[5] Remove from the list" << std::endl;
-        std::cout << "[6] Empty the list" << std::endl;
-        std::cout << "[7] Exit" << std::endl;
-
-        std::cout << "Enter your choice" << std::endl;
-        std::cin >> option;
-        if (option < 1 || option > 6)
-            std::cout << "\tInvalid choice" << std::endl;
-    } while (option < 1 || option > 6);
-
-    return option;
+bool isEmpty(DoublyLinkedList& list){
+    if (list.begin == nullptr)
+        return true;
+    return false;
 }
 
 void pause(){
@@ -183,18 +159,47 @@ void pause(){
     getch();
 }
 
+Student registerStudent() {
+    std::string name;
+    float final_grade = 0.0;
 
-bool isEmpty(DoubleLinkedList& list){
-    if (list.begin == nullptr)
-        return true;
-    return false;
-}
+    std::cout << "[?] Name: ";
+    std::cin >> name;
 
-void insertHead(DoubleLinkedList& list, int data){
+    std::cout << "[?] Final grade: ";
+    std::cin >> final_grade;
+
+    Student student = { name, final_grade };
+
+    return student;
+};
+
+void insertStudent(DoublyLinkedList& list, Student student){
     Node* new_node = new Node();
-    new_node->number = data;
+    new_node->student = student;
 
     if(isEmpty(list)){
+        new_node->next = nullptr;
+        new_node->previous = nullptr;
+        list.begin = new_node;
+        list.end = new_node;
+    } else {
+        new_node->next = list.begin;
+        new_node->previous = nullptr;
+        list.begin->previous = new_node;
+        list.begin = new_node;
+    }
+
+
+    list.size++;
+}
+
+
+void insertStudent(DoublyLinkedList& list, Student* student) {
+    Node* new_node = new Node();
+    new_node->student = *student;
+
+    if (isEmpty(list)) {
         new_node->next = nullptr;
         new_node->previous = nullptr;
         list.begin = new_node;
@@ -209,54 +214,40 @@ void insertHead(DoubleLinkedList& list, int data){
     list.size++;
 }
 
-void insertTail(DoubleLinkedList& list, int data){
-    Node* new_node = new Node();
-    new_node->number = data;
-
-    if(isEmpty(list)){
-        new_node->next = nullptr;
-        new_node->previous = nullptr;
-        list.begin = new_node;
-        list.end = new_node;
-    } else {
-        list.end->next = new_node;
-        new_node->previous = list.end;
-        new_node->next = nullptr;
-        list.end = new_node;
-    }
-
-    list.size++;
-}
-
-void showDoubleLinkedList(DoubleLinkedList& list){
+void dumpStudents(DoublyLinkedList& list, std::string filter){
     if(!isEmpty(list)){
         Node *tmp_node = list.begin;
 
+
+        std::cout << std::endl;
+        std::cout << std::left << std::setw(20) << "Name";
+        std::cout << std::setw(10) << "Grade" << std::endl;
+
+
+        if(filter == "approved"){
+            while (tmp_node != nullptr) {
+
+                if (tmp_node->student.final_grade >= AVERAGE){
+                    std::cout << std::setw(20) << tmp_node->student.name;
+                    std::cout << std::setw(10) << std::fixed << std::setprecision(2) << tmp_node->student.final_grade << std::endl;
+                }
+
+            tmp_node = tmp_node->next;
+
+            }          
+
+            return;
+        }
+
         while (tmp_node != nullptr) {
-            std::cout << tmp_node->number << " ";
+            std::cout << std::setw(20) << tmp_node->student.name;
+            std::cout << std::setw(10) << std::fixed << std::setprecision(2) << tmp_node->student.final_grade << std::endl;
             tmp_node = tmp_node->next;
         }
 
-        std::cout << "\n[+] List size: " << list.size << std::endl;
+        // std::cout << "\n[+] List size: " << list.size << std::endl;
     } else {
         std::cout << std::endl << "[!] Empty list...";
     }
-}
-
-bool searchInDoubleLinkedList(DoubleLinkedList& list, int data){
-    if(!isEmpty(list)){
-        std::cout << "[!] List empty..." << std::endl;
-        return false;
-    }
-
-    Node *tmp_node = list.begin;
-    
-    while (tmp_node != nullptr) {
-        if (tmp_node->number == data)
-            return true;
-        tmp_node = tmp_node->next;
-    }
-
-    return false;
 }
 
