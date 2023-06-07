@@ -170,6 +170,15 @@ bool binarySearch(std::vector<int>& vector, int target, int begin, int end){
 
 
 
+# Stack and Queue
+
+The stack and queue are popular linear data structures with a wide variaty of 
+applications. The stack follows LIFO (Last In First Out) principle where the 
+data is inserted and extract for the same side. On the other hand, the queue 
+follows FIFO (First In First Out) principle, i.e, data inserted at one side 
+and extracted from the other side.
+
+
 
 
 
