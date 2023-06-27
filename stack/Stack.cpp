@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <conio.h>
-#include <windows.h>
+#include <conio.h>
 
 struct Stack {
     int number;
