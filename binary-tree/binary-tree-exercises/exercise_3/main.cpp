@@ -138,7 +138,9 @@ int main(){
                         if(!(subtree->left == nullptr) && !(subtree->right != nullptr)){
                             cout << "[+] The current node doesn't contain subtrees" << endl;
                         }
+
                     }
+
 
                 }
                 else 
