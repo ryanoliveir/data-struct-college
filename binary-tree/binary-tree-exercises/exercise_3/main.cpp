@@ -73,6 +73,7 @@ int menu();
 BinaryTree* insert(BinaryTree* tree, int value);
 bool search(BinaryTree* tree, int value, bool found);
 void sortedDisplay(BinaryTree* tree);
+BinaryTree* getRightSubtree(BinaryTree* tree, int value);
 bool isEmpty(BinaryTree *tree);
 
 
@@ -80,7 +81,8 @@ int main(){
     console.enableColorMode();
    
     BinaryTree *root = nullptr;
-    
+    BinaryTree *subtree = nullptr;
+
     int choice, input_value;
     bool found = false;
     
@@ -90,8 +92,8 @@ int main(){
 
         switch (choice) {
             case 1: 
-                cout << console.highlight << "[*] Inserir numero na Arvore [*]" << console.reset << endl;
-                cout << endl << console.highlight << "[?]" << console.reset << " Numero que deseja inserir: ";
+                cout << console.highlight << "[*] Insert a number on Binary Tree [*]" << console.reset << endl;
+                cout << endl << console.highlight << "[?]" << console.reset << " Provide the number: ";
                 cin >> input_value;
 
                 root = insert(root, input_value);
@@ -100,38 +102,91 @@ int main(){
                 break;
 
             case 2:
-                cout << console.highlight << "[*] Consultar toda a Arvore em ordem [*]" << console.reset << endl;
+                cout << console.highlight << "[*] Query the entire Tree in order [*]" << console.reset << endl;
                 if (!isEmpty(root))
                     sortedDisplay(root);
                 else 
-                    cout << endl <<  console.error << "[!] Arvore vazia [!]" << console.reset << endl;
+                    cout << endl <<  console.error << "[!] Empty tree [!]" << console.reset << endl;
+
                 continueAndClear();
+                break;
+            case 3:
+                if (!isEmpty(root)){
+                    cout << console.highlight << "[*] Query a tree node [*]" << console.reset << endl;
+                    cout << endl << console.highlight << "[?]" << console.reset << " Provide the node value: ";
+                    cin >> input_value;
 
-            // case 2:
-            //     cout << console.highlight << "[*] Consultar um noh da Arvore [*]" << console.reset << endl;
-            //     cout << endl << console.highlight << "[?]" << console.reset << " Numero que deseja consultar: ";
-            //     cin >> input_value;
+                    found = search(root, input_value, found);
+                    found == true ? cout << endl << console.highlight << "[*] Node found [*]" << console.reset << endl : cout << endl << console.error << "[!] Node not found [!]" << console.reset << endl;
+                    //randomBSTree(11, 6, 14, 3, 7, 13, 15, n, 4)
+                    if(found){
+                        subtree = getRightSubtree(root, input_value);
+                        cout << "[+] Node value: " << subtree->data << endl;
 
-            //     if (!isEmpty(root)){
-            //         found = search(root, input_value, found);
-            //         found == true ? cout << endl << console.highlight << "[*] Numero encontrado [*]" << console.reset << endl : cout << endl << console.error << "[!] Numero nao encontrado [!]" << console.reset << endl;
-            //     }
-            //     else 
-            //         cout << endl << console.error << "[!] Arvore vazia [!]" << console.reset << endl;
+                        if(subtree->right != nullptr ){
+                            cout << "[+] Right subtree value: " << subtree->right->data << endl;
+                        }else {
+                            cout << "[+] Right subtree doesn't exist" << endl;
+                        }
 
-            //     continueAndClear();
-            //     break;
+                        if(subtree->left != nullptr ){
+                            cout << "[+] Left subtree value: " << subtree->left->data << endl;
+                        }else {
+                            cout << "[+] Left subtree doesn't exist"<< endl;
+                        }
+
+                        if(!(subtree->left == nullptr) && !(subtree->right != nullptr)){
+                            cout << "[+] The current node doesn't contain subtrees" << endl;
+                        }
+                    }
+
+                }
+                else 
+                    cout << endl << console.error << "[!] Empty tree [!]" << console.reset << endl;
+
+                continueAndClear();
+                break;
+            case 4:
+                if (!isEmpty(root)){
+                    cout << console.highlight << "[*] Query a tree node [*]" << console.reset << endl;
+                    cout << endl << console.highlight << "[?]" << console.reset << " Provide the node value: ";
+                    cin >> input_value;
+
+                    found = search(root, input_value, found);
+                    found == true ? cout << endl << console.highlight << "[*] Node found [*]" << console.reset << endl : cout << endl << console.error << "[!] Node not found [!]" << console.reset << endl;
+                    //randomBSTree(11, 6, 14, 3, 7, 13, 15, n, 4)
+                    if(found){
+                        subtree = getRightSubtree(root, input_value);
+                        cout << "[+] Node value: " << subtree->data << endl;
+
+                        if(subtree->left != nullptr ){
+                            cout << "[+] Left subtree value: " << subtree->left->data << endl;
+                        }else {
+                            cout << "[+] Left subtree doesn't exist" << endl;
+                        }
+
+                        if(!(subtree->left == nullptr) && !(subtree->right != nullptr)){
+                            cout << "[+] The current node doesn't contain subtrees" << endl;
+                        }
+
+                    }
+                }
+                else 
+                    cout << endl << console.error << "[!] Empty tree [!]" << console.reset << endl;
+
+                continueAndClear();
+                break;
+
             
 
         }  
 
-    } while (choice != 0);
-
-    return 0;
-
+    } while (choice != 5);
 
     return 0;
 }
+
+
 
 
 void continueAndClear() {
@@ -165,7 +220,7 @@ int menu(){
 }
 
 
-
+//37 40 44 47 49
 bool isEmpty(BinaryTree *tree){
     return tree == nullptr ? true : false;
 }
@@ -191,20 +246,35 @@ bool search(BinaryTree* tree, int value, bool found){
     if(!isEmpty(tree) && !found){
         if(tree->data == value)
             found = true;
-        else if(tree->data > value)
-            found = search(tree->right, value, found);
-        else 
+        else if(value < tree->data) 
             found = search(tree->left, value, found);
+        else 
+            found = search(tree->right, value, found);
     }
 
+    
     return found;
 }
 
 void sortedDisplay(BinaryTree* tree){
     if(!isEmpty(tree))
     {
-        sortedDisplay(tree-> left);
+        sortedDisplay(tree->left);
         cout << tree->data << " ";
-        sortedDisplay(tree-> right);
+        sortedDisplay(tree->right);
     }
 }
+
+BinaryTree* getRightSubtree(BinaryTree* tree, int value) {
+    if(!isEmpty(tree)){
+        if(tree->data == value)
+            return tree;
+        else if(tree->data < value)
+            return getRightSubtree(tree->right, value);
+        else 
+            return  getRightSubtree(tree->left, value);
+    }
+
+    return nullptr;
+}
+
